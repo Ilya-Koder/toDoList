@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+/* Main styles */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #856a5d;
+  font-family: "Funnel Display", sans-serif;
+}
+header {
+  background-color: #60463b;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  align-items: center;
+}
+/* Task list styles */
+.task-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.5rem;
+  gap: 5px;
+}
+.description {
+  border: none;
+}
+
+/* Button styles */
+button {
+  padding: 0.3rem 0.6rem;
+  color: rgb(0, 0, 0);
+  background-color: #b3cbb9;
+  border-radius: 5px;
+}
+#clear-list-button {
+  display: flex;
+  align-self: flex-end;
+  background-color: #2e3138;
+  color: rgb(255, 255, 255);
+  padding: 1rem 2rem;
+}
+
+/* Input types styles */
+input {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #ddd8b8;
+}
+input[type="checkbox"] {
+  background-color: #ddd8b8;
+  border: 2px solid #2e3138;
+  border-radius: 5px;
+  width: 25px;
+  height: 25px;
+}
+
+input[type="checkbox"]:focus {
+  box-shadow: 0 0 5px 2px rgba(119, 146, 134, 0.5);
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  border-radius: 5px;
+}
