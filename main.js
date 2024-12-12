@@ -2,31 +2,96 @@ const taskForm = document.querySelector("#task-form");
 const taskInput = document.querySelector("#user-input");
 const listContainer = document.querySelector("#list-container");
 const clearButton = document.querySelector("#clear-list-button");
+const showCompleted = document.querySelector("#show-completed");
+const sortBy = document.querySelector("#sort-by");
 
 //Empty array
 let tasks = [];
 
 // Getting localStorage
+showCompleted.checked = localStorage.getItem("showCompleted") === "true";
+sortBy.value = localStorage.getItem("sortBy");
 const storedTask = localStorage.getItem("tasks");
 if (storedTask) {
   tasks = JSON.parse(storedTask);
-  renderList(tasks);
+  buildList(tasks);
 }
 
 // Text input for task elements
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault(); // Prevents refreshing the website
   const formData = new FormData(taskForm);
+  //trigger error if task is empy
+  if (!formData.get("user-input")) {
+    showError("You can't submit an empty task");
+    return;
+  }
+  //lager nytt task object og pusher til task variable
+  const taskDescription = formData.get("user-input").trim();
+  if (taskDescription === "") return;
   tasks.push({
     timeStamp: new Date().toLocaleString("en-UK"),
     description: formData.get("user-input"),
     completed: false,
   });
-  renderList(tasks);
+  buildList(filterAndSort(tasks));
   saveStateToLocalStorage();
 });
 
+function showError(message) {
+  const modal = document.createElement("dialog");
+
+  const errorMsg = document.createElement("p");
+  errorMsg.textContent = message;
+
+  const closeModal = document.createElement("button");
+  closeModal.textContent = "Got it";
+  modal.append(errorMsg, closeModal);
+  document.body.append(modal);
+
+  modal.showModal();
+  window.addEventListener("click", () => {
+    modal.close();
+    window.removeEventListener("click", closeModal);
+  });
+}
+
+showCompleted.addEventListener("change", () => {
+  renderList(tasks);
+});
+
+sortBy.addEventListener("change", () => {
+  renderList(tasks);
+});
+
 function renderList(taskArr) {
+  //clear local storage if task array is empty
+  if (taskArr.length === 0) {
+    localStorage.removeItem("tasks");
+    localStorage.removeItem("showCompleted");
+    localStorage.removeItem("sortBy");
+  }
+  buildList(filterAndSort(taskArr));
+  saveStateToLocalStorage();
+}
+
+function filterAndSort(arr) {
+  return arr
+    .filter((e) => (!showCompleted.checked ? !e.completed : e))
+    .sort((a, b) => {
+      if (sortBy.value === "time-asc") {
+        return new Date(a.timeStamp) - new Date(b.timeStamp);
+      } else if (sortBy.value === "time-desc") {
+        return new Date(b.timeStamp) - new Date(a.timeStamp);
+      } else if (sortBy.value === "alpha-asc") {
+        return b.description.localeCompare(a.description);
+      } else if (sortBy.value === "alpha-desc") {
+        return a.description.localeCompare(b.description);
+      }
+    });
+}
+
+function buildList(taskArr) {
   // Empty list
   while (listContainer.firstChild) {
     listContainer.firstChild.remove();
@@ -49,6 +114,9 @@ function renderList(taskArr) {
     descriptionElem.readOnly = true;
 
     // Add task-completed checkbox
+    if (task.completed) {
+      taskContainer.classList.add("completed");
+    }
     const completedElem = document.createElement("input");
     completedElem.type = "checkbox";
     completedElem.checked = task.completed;
@@ -57,6 +125,11 @@ function renderList(taskArr) {
     completedElem.addEventListener("change", () => {
       tasks[i].completed = completedElem.checked;
       saveStateToLocalStorage();
+      if (task.completed) {
+        taskContainer.classList.add("completed");
+      } else {
+        taskContainer.classList.remove("completed");
+      }
     });
 
     // Add edit button
@@ -99,14 +172,18 @@ function renderList(taskArr) {
 }
 
 // Clear list button
-clearButton.textContent = "Clear list";
 clearButton.addEventListener("click", () => {
   tasks = [];
-  renderList();
+  buildList(tasks);
   saveStateToLocalStorage();
 });
 
 // Storing the task list in localStorage
 function saveStateToLocalStorage() {
+  //Serialize task array to JSON before storing to local storage
   localStorage.setItem("tasks", JSON.stringify(tasks));
+  //store boolean value of showCompleted checkbox
+  localStorage.setItem("showCompleted", showCompleted.checked);
+  //store the value of the sort by select element
+  localStorage.setItem("sortBy", sortBy.value);
 }

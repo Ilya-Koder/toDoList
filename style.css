@@ -71,3 +71,66 @@ input[type="text"] {
   padding: 0.5rem;
   border-radius: 5px;
 }
+.completed {
+  opacity: 0.5;
+}
+#menu {
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+#sort-by {
+  background-color: #ddd8b8;
+  padding: 0.3rem;
+  border-radius: 5px;
+}
+/* Styling for modal pop-up */
+dialog {
+  width: 300px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the modal */
+  z-index: 1000;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+dialog[open] {
+  opacity: 1;
+}
+
+/* Style for the error message */
+dialog p {
+  font-size: 16px;
+  color: #000000;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Style for the close button */
+dialog button {
+  background-color: #2e3138;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+
+dialog button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+dialog[open]::before {
+  display: block; /* Show backdrop when modal is open */
+}

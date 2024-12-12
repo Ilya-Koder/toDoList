@@ -15,7 +15,18 @@
           type="submit"
         />
       </form>
-      <button id="clear-list-button"></button>
+      <div id="menu">
+        <label for="show-completed">Show completed tasks</label>
+        <input type="checkbox" name="show-completed" id="show-completed" />
+        <label for="sort-by">Sort-type</label>
+        <select name="sort-by" id="sort-by">
+          <option value="time-asc">Date added ascending</option>
+          <option value="time-desc">Date added desceding</option>
+          <option value="alpha-asc">Alphapet ascending</option>
+          <option value="alpha-desc">Alphapet descending</option>
+        </select>
+      </div>
+      <button id="clear-list-button">Clear list</button>
     </header>
     <main id="list-container"></main>
   </body>
